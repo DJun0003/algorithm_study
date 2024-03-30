@@ -1,46 +1,54 @@
-# from collections import deque
+from collections import deque
+
 # def solution(begin, target, words):
 #     if target not in words:
 #         return 0
     
 #     nodes = deque([[begin, 0]])
+#     v = [False] * len(words)
 #     while nodes:
 #         n, depth = nodes.popleft()
 #         if n == target:
 #             return depth
         
-        
-#         for w in words:
-#             for i in range(len(n)-1):
-#                 if n[:i]+n[i+1:] == w[:i] + w[i+1:]:
+#         for i, w in enumerate(words):
+#             if not v[i]:
+#                 cnt = 0
+#                 for ii in range(len(n)):
+#                     if n[ii] != w[ii]:
+#                         cnt += 1
+#                 if cnt == 1:
 #                     nodes.append([w, depth+1])
-#             if n[:-1] == w[:-1]:
-#                 nodes.append([w, depth+1])
-#         print(nodes)
-# # solution("hit", "cog", ["hot", "dot", "dog", "lot", "log", "cog"])
-
-
-from collections import deque
-
+#                     v[i] = True
+#     return 0
 
 def solution(begin, target, words):
-    answer = 0
-    q = deque()
-    q.append([begin, 0])
-    V = [ 0 for i in range(len(words))]
-    while q:
-        word, cnt = q.popleft()
-        if word == target:
-            answer = cnt
-            break        
-        for i in range(len(words)):
-            temp_cnt = 0
-            if not V[i]:
-                for j in range(len(word)):
-                    if word[j] != words[i][j]:
-                        temp_cnt += 1
-                if temp_cnt == 1:
-                    q.append([words[i], cnt+1])
-                    V[i] = 1
+    
+    if target not in words : 
+        return  0
+    
+    return bfs(begin, target, words)
+
+
+#최소 단계를 찾아야 하므로 bfs
+def bfs(begin, target, words):
+
+    queue = deque()
+    queue.append([begin, 0]) #시작 단어와 단계 0으로 초기화
+    
+    while queue:
+        now, step = queue.popleft()
+        
+        if now == target:
+            return step
+        
+        #단어를 모두 체크하면서, 해당 단어가 변경될 수 있는지 체크
+        for word in words:
+            count = 0
+            for i in range(len(now)): #단어의 길이만큼 반복하여
+                if now[i] != word[i]: #단어에 알파벳 한개씩 체크하기
+                    count += 1
                     
-    return answer
+            if count == 1: 
+                queue.append([word, step+1])
+# solution("hit", "cog", ["hot", "dot", "dog", "lot", "log", "cog"])
