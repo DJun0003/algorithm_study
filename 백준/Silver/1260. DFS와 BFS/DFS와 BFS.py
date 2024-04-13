@@ -1,39 +1,40 @@
 import sys
 from collections import deque
 
-def dfs(graph, node, visited):
-    visited[node] = True
+n, m, v = map(int, sys.stdin.readline().split())
+graph = [[] for _ in range(n+1)]
+for _ in range(m):
+    n1, n2 = map(int, sys.stdin.readline().split())
+    graph[n1].append(n2)
+    graph[n2].append(n1)
+for i in range(1, n+1):
+    graph[i].sort()
+    
+visited1 = [False] * (n+1)
+visited2 = [False] * (n+1)
+
+def dfs(node):
+    visited1[node] = True
     print(node, end=' ')
-    for n in range(len(graph)):
-        if graph[node][n] == 1 and not visited[n]:
-            dfs(graph, n, visited)
+ 
+    for n2 in graph[node]:
+        if visited1[n2] == False:
+            dfs(n2)
 
-def bfs(graph, start):
-    visited = [False] * (len(graph)+1)
-    queue = deque([start])
-    visited[start] = True
-    print(start, end=' ')
-
+def bfs():
+    queue = deque([v])
+    visited2[v] = True
+    
     while queue:
         node = queue.popleft()
-        for n in range(len(graph)):
-            if graph[node][n] == 1 and not visited[n]:
-                visited[n] = True
-                print(n, end=' ')
-                queue.append(n)
+        print(node, end=' ')        
+        
+        for n2 in graph[node]:
+            if visited2[n2] == False:
+                visited2[n2] = True
+                queue.append(n2)
 
-
-
-
-
-n, m, v = map(int, sys.stdin.readline().split())
-graph = [[0]*(n+1) for _ in range(n+1)]
-for i in range(m):
-    n1, n2 = map(int, sys.stdin.readline().split())
-    graph[n1][n2] = 1
-    graph[n2][n1] = 1
-
-dfs_visited = [False] * (n+1)
-dfs(graph, v, dfs_visited)
+dfs(v)
 print()
-bfs(graph, v)
+bfs()
+    
