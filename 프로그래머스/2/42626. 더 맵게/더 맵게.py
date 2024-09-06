@@ -1,18 +1,23 @@
 import heapq
-from collections import deque
 
 def solution(scv, K):
     ans = 0
     heapq.heapify(scv)
-    while True:
-        f1 = heapq.heappop(scv)
+    
+    while len(scv) > 1:
+        first = heapq.heappop(scv)
         
-        if f1 < K:
-            try:
-                heapq.heappush(scv, f1+(heapq.heappop(scv)*2))
-                ans += 1
-            except:
-                return -1
-        else:
-            break
-    return ans
+        if first >= K:
+            return ans
+        
+        second = heapq.heappop(scv)
+        new = first + (2 * second)
+        ans += 1
+        
+        heapq.heappush(scv, new)
+    
+    first = heapq.heappop(scv)
+    if first < K:
+        return -1
+    else:
+        return ans
