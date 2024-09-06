@@ -1,16 +1,16 @@
 from collections import deque
 
 def solution(string):
-    left = []
+    left = deque([])
     
     for s in string:
         if s == '(':
             left.append(s)
         else:
-            try:
-                left.pop()
-            except:
+            if len(left) == 0:
                 return False
-    
-
+            else:
+                left.pop()
+        
+        
     return len(left) == 0
