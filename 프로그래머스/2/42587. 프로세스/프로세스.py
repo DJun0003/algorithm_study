@@ -1,20 +1,17 @@
 from collections import deque
-import heapq
 
-def solution(priors, location):
-    queue = deque([(priors[i], i) for i in range(len(priors))])
-    count = 0
+def solution(priorities, location):
+    total = len(priorities)
+    priorities = deque(priorities)
+    loc = deque([i for i in range(total)])
     
-    while True:
-        p, l = queue.popleft()
-        
-        if any (p < q[0] for q in queue):
-            queue.append((p,l))
-        else:
-            count += 1
-            if l == location:
-                break
+    while loc:
+        p, l = priorities.popleft(), loc.popleft()
+        if loc and p < max(priorities):
+            priorities.append(p)
+            loc.append(l)
+        elif l == location:
+            return total - len(loc)
+    
+    return total
             
-        
-    
-    return count
