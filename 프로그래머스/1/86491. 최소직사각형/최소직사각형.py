@@ -1,16 +1,8 @@
 def solution(sizes):
-    curs = [0,0]
-    answer = 0
-    
+    w, h = 0, 0
     for s in sizes:
-        if s[0] < s[1]:
-            s.reverse()
-        
-        if curs[0] < s[0]:
-            curs[0] = s[0]
-        if curs[1] < s[1]:
-            curs[1] = s[1]
-        answer = curs[0] * curs[1]
-        
-        
-    return answer
+        s.sort()
+        w = s[0] if s[0] > w else w
+        h = s[1] if s[1] > h else h
+    
+    return w*h
