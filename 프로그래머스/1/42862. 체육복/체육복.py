@@ -1,33 +1,25 @@
-from collections import deque
 def solution(n, lost, reserve):
-    answer, len_lost = 0, len(lost)
-    lost.sort()
-    reserve.sort()
+    lost = set(lost)
+    reserve = set(reserve)
+    same = lost & reserve
+    lost = sorted(list(lost - same))
+    reserve = sorted(list(reserve - same))
     
-    while lost:
-        stu = lost.pop(0)
+    r, l = 0, 0
+    students = 0
+    
+    for l in range(len(lost)):
+        while r<len(reserve) and reserve[r] < lost[l]-1:
+            r += 1
         
-        while reserve:
-            if reserve[0] >= stu-1:
-                break
-            reserve.pop(0)
-    
-        if not reserve:
+        if r >= len(reserve):
             break
+        
+        if lost[l]-1 == reserve[r] or lost[l]+1 == reserve[r]:
+            r += 1
+            students += 1
             
-        if stu == reserve[0]:
-            len_lost -= 1
-            reserve.pop(0)
-        elif reserve[0] == stu-1:
-            len_lost -= 1
-            reserve.pop(0)
-            if reserve and reserve[0] == stu:
-                reserve.pop(0)
             
-        elif reserve[0] == stu+1:
-            len_lost -= 1
-            reserve.pop(0)
-            if lost and lost[0] == stu+1:
-                lost.pop(0)
     
-    return n-len_lost
+    return n - len(lost) + students
+        
