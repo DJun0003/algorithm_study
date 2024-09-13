@@ -1,22 +1,20 @@
 from collections import deque
+
 def solution(maps):
-    n, m = len(maps)-1, len(maps[0])-1
-    queue = deque([[0,0,1]])
+    n, m = len(maps), len(maps[0])
+    move = [[-1,0], [0,1], [1,0], [0,-1]]
+    queue = deque([[0, 0, 1]])
     maps[0][0] = 0
     
     while queue:
-        place = queue.popleft()
-        
-        for move in ([1,0], [0,1], [-1,0], [0,-1]):
-            new_y, new_x = place[0] + move[0], place[1] + move[1]
-            if new_y < 0 or new_y > n or new_x < 0 or new_x > m:
-                continue
-            if new_y == n and new_x == m:
-                return place[2]+1
-            if maps[new_y][new_x]:
-                maps[new_y][new_x] = 0
-                queue.append([new_y, new_x, place[2]+1])
                 
-    
-    
+        cn, cm, ans = queue.popleft()
+        if cn == n-1 and cm == m-1:
+            return ans
+        
+        for dir in move:
+            new_n, new_m = min(max(0, cn + dir[0]), n-1), min(max(0, cm + dir[1]), m-1)
+            if maps[new_n][new_m] == 1:
+                queue.append([new_n, new_m, ans+1])
+                maps[new_n][new_m] = 0
     return -1
