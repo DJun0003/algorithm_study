@@ -1,15 +1,18 @@
-def solution(name):    
-    updown = 0
-    a_num, z_num = ord('A'), ord('Z')
-    leftright = len(name) - 1
+def solution(name):
+    n = len(name)
+    ord_a, ord_z = ord('A'), ord('Z')
     
-    for i, spell in enumerate(name):
-        updown += min(ord(spell) - a_num, z_num - ord(spell) + 1)
+    leftright = n-1
+    answer = 0
+    for i, ch in enumerate(name):
+        updown = min(ord(ch)-ord_a, ord_z-ord(ch)+1)
+        answer += updown
         
-        next = i + 1
-        while next < len(name) and name[next] == 'A':
+        next = i+1
+        while next<n and name[next] == 'A':
             next += 1
         
-        leftright = min([leftright, 2 * i + len(name) - next, i + 2 * (len(name) - next)])
+        leftright = min(leftright, (2*i) + (n-next), 2*(n-next) + i)
     
-    return updown + leftright
+    answer += leftright
+    return answer
