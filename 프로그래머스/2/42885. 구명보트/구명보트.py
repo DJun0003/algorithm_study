@@ -1,13 +1,17 @@
-from collections import deque
 def solution(people, limit):
-    answer = 0
     people.sort()
-    people = deque(people)
+    st, fi = 0, len(people)-1
+    answer = 0
     
-    while people:
-        p = people.pop()
+    while st < fi:
+        if people[st]+people[fi] <= limit:
+            st += 1
+        fi -= 1
         answer += 1
-        if people and limit - p >= people[0]:
-            people.popleft()
-        
+    
+    if st == fi:
+        answer += 1
+    
     return answer
+        
+        
