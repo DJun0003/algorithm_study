@@ -1,34 +1,29 @@
 from collections import deque
 
-def solution(begin, target, words):
+def solution(begin, target, words):    
+    queue = deque([[begin, 0]])
+    l = len(begin)
+    visits = [False] * len(words)
     if target not in words:
         return 0
     
-    nodes = deque([[begin, 0]])
-    v = [False] * len(words)
-    while nodes:
-        n, depth = nodes.popleft()
-        if n == target:
-            return depth
+    while queue:
+        cur, ans = queue.popleft()
         
-        for i, w in enumerate(words):
-            if not v[i]:
-                # cnt = 0
-                # for ii in range(len(n)):
-                #     if n[ii] != w[ii]:
-                #         cnt += 1
-                # if cnt == 1:
-                #     nodes.append([w, depth+1])
-                #     v[i] = True
-                #     # words.remove(w)
-                
-                for ii in range(len(n)-1):
-                    if n[:ii]+n[ii+1:] == w[:ii]+w[ii+1:]:
-                        nodes.append([w, depth+1])
-                        v[i] = True
-                if n[:-1] == w[:-1]:
-                    nodes.append([w, depth+1])
-                    v[i] = True
+        if cur == target:
+            return ans
+        
+        for i in range(len(words)):
+            if not visits[i]:
+                diff = 0
+                for j in range(l):
+                    if cur[j] != words[i][j]:
+                        diff += 1
+                    if diff > 1:
+                        break
+                if diff == 1:
+                    queue.append([words[i], ans+1])
+                    visits[i] = True
+    
     return 0
-
-# solution("hit", "cog", ["hot", "dot", "dog", "lot", "log", "cog"])
+            
