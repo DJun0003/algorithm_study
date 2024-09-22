@@ -1,11 +1,8 @@
 def solution(numbers):
-    ans = ''
+    numbers = sorted([str(n) for n in numbers], key=lambda x: x*3,reverse=True)
+    answer = ''.join(numbers)
     
-    numbers = list(map(str, numbers))
-    numbers = sorted(numbers, key=lambda x: x*3, reverse=True)
-    
-    for n in numbers:
-        ans += n
-    
-    
-    return str(int(ans))
+    if int(answer) == 0:
+        return '0'
+    else:
+        return answer
