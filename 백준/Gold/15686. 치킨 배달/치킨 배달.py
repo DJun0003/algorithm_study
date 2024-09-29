@@ -1,4 +1,3 @@
-from itertools import combinations
 import math
 
 n,m = map(int, input().split())
@@ -15,21 +14,30 @@ for _ in range(n):
             chikens.append([j, i])
     j += 1
 
-chikens = combinations(chikens, m)
-answer = math.inf
 
-for cur_chikens in chikens:
-    total_lenght = 0
-    for home in house:
-        min_length = n*n
-        for chiken in cur_chikens:
-            length = abs(chiken[0]-home[0]) + abs(chiken[1]-home[1])
-            if length < min_length:
-                min_length = length
-        total_lenght += min_length
+chiken_list = []
     
-    if answer > total_lenght:
-        answer = total_lenght
+def combinations(cur, answer):
+    if len(chiken_list) == m:
+        total_length = 0
+        for home in house:
+            min_length = 1e9
+            for chiken in chiken_list:
+                length = abs(home[0]-chiken[0]) + abs(home[1]-chiken[1])
+                if length < min_length:
+                    min_length = length
+            total_length += min_length
+        
+        return total_length
+    
+    for i in range(cur, len(chikens)):
+        chiken_list.append(chikens[i])
+        cur_length = combinations(i+1, answer)
+        if cur_length < answer:
+            answer = cur_length
+        chiken_list.pop()
+    
+    return answer
 
-print(answer)
-
+print(combinations(0, 1e9))
+    
