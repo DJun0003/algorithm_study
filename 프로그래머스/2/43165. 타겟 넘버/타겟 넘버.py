@@ -1,15 +1,14 @@
 from collections import deque
 
 def solution(numbers, target):
-    
-    q = deque([0])
+    cur_list = [0]
+    numbers = deque(numbers)
     
     for num in numbers:
-        new_q = deque([])
-        while q:
-            cur = q.popleft()
-            new_q.append(cur+num)
-            new_q.append(cur-num)
-        q = new_q
+        new_list = []
+        for cur in cur_list:
+            new_list.append(cur+num)
+            new_list.append(cur-num)
+        cur_list = new_list
     
-    return q.count(target)
+    return cur_list.count(target)
