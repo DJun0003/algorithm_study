@@ -1,30 +1,27 @@
-from heapq import heappush, heappop
+import heapq
+
 def solution(N, road, K):
-    graph = [{} for _ in range(N+1)]
-    for a,b,c in road:
-        if b in graph[a]:
-            graph[a][b] = min(c, graph[a][b])
-            graph[b][a] = min(c, graph[b][a])
-        else:
-            graph[a][b] = c
-            graph[b][a] = c
+    answer = 0
+    graph = [[] for _ in range(N+1)]
     
-    q = [[1, 0]]
-    costs = [1e9] * (N+1)
-    costs[1] = 0
+    for [n1, n2, c] in road:
+        graph[n1].append([n2, c])
+        graph[n2].append([n1, c])
+    
+    q = [[0, 1]]
+    heapq.heapify(q)
+    length = [1e9] * (N+1)
+    length[1] = 0
     
     while q:
-        cur, c = heappop(q)
-        if c>costs[cur]:
+        cost, cur = heapq.heappop(q)
+        
+        if length[cur] < cost:
             continue
-        for des, w in graph[cur].items():
-            n_c = c+w
-            if n_c<costs[des]:
-                costs[des] = n_c
-                heappush(q, [des,n_c])
-    
-    answer = 0
-    for c in costs:
-        if c <= K:
-            answer += 1
-    return answer
+        
+        for [des, c] in graph[cur]:
+            if cost+c < length[des]:
+                length[des] = cost+c
+                heapq.heappush(q, [cost+c, des])
+        
+    return sum(map(lambda x: x<=K, length))
