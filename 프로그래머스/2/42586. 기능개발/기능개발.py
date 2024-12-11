@@ -1,16 +1,19 @@
-from math import ceil
+import math
 
 def solution(progresses, speeds):
     answer = []
-    num, t = 1, ceil((100-progresses[0]) / speeds[0])
-    for i in range(1, len(progresses)):
-        time = ceil((100-progresses[i]) / speeds[i])
-        if t < time:
-            answer.append(num)
-            num, t = 1, time
+    bf_time = 0
+    ans = 0
+    for i in range(len(progresses)):
+        time = math.ceil((100-progresses[i])/speeds[i])
+        if time > bf_time:
+            bf_time = time
+            if ans != 0:
+                answer.append(ans)
+            ans = 1
         else:
-            num += 1
-    if num > 0:
-        answer.append(num)
-        
+            ans += 1
+    
+    answer.append(ans)
+    
     return answer
