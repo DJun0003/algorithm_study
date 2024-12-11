@@ -1,14 +1,17 @@
 def solution(number, k):
     answer = [number[0]]
-    for i, num in enumerate(number[1:]):
-        while answer and k and answer[-1] < num:
+    for i, n in enumerate(number[1:]):
+        while k and answer and n > answer[-1]:
             answer.pop()
             k -= 1
+            
+        # if k == 0:
+        #     answer = ''.join(answer) + number[i+1:]
+        #     break
         
-        answer.append(num)
+        answer.append(n)
     
-    if k:
+    if k > 0:
         answer = answer[:-k]
     
     return ''.join(answer)
-        
