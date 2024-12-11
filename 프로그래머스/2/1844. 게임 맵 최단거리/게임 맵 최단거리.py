@@ -1,20 +1,25 @@
 from collections import deque
 
-def solution(maps):
-    n, m = len(maps), len(maps[0])
-    move = [[-1,0], [0,1], [1,0], [0,-1]]
-    queue = deque([[0, 0, 1]])
+move = [[-1,0], [1,0], [0,-1], [0, 1]]
+
+def bfs(maps):
+    q = deque([[0,0,1]])
     maps[0][0] = 0
     
-    while queue:
-                
-        cn, cm, ans = queue.popleft()
-        if cn == n-1 and cm == m-1:
-            return ans
+    while q:
+        cur_y, cur_x, count = q.popleft()
+        if cur_y==len(maps)-1 and cur_x == len(maps[0])-1:
+            return count
         
-        for dir in move:
-            new_n, new_m = min(max(0, cn + dir[0]), n-1), min(max(0, cm + dir[1]), m-1)
-            if maps[new_n][new_m] == 1:
-                queue.append([new_n, new_m, ans+1])
-                maps[new_n][new_m] = 0
+        for m in move:
+            ny, nx = cur_y+m[0], cur_x+m[1]
+            if ny>-1 and ny<len(maps) and nx>-1 and nx<len(maps[0]):
+                if maps[ny][nx] == 1:
+                    q.append([ny, nx, count+1])
+                    maps[ny][nx] = 0
+        
     return -1
+        
+    
+def solution(maps):
+    return bfs(maps)
