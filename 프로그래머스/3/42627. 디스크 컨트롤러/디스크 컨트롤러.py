@@ -1,26 +1,26 @@
 import heapq
+from collections import deque
 
 def solution(jobs):
-    jobs.sort(key = lambda x: (x[0], x[1]), reverse=True)
-    waits = []
-    cur = 0
-    ans = 0
     num = len(jobs)
+    jobs = deque(sorted(list(map(lambda x: [x[1], x[0]], jobs)), key=lambda x:x[1]))
+    pq = []
+    time = jobs[0][1]
+    answer = 0
     
-    while len(waits) or len(jobs):
-        while len(jobs) and jobs[-1][0] <= cur:
-            j = jobs.pop()
-            heapq.heappush(waits, [j[1], j[0]])
-        
-        if not len(waits):
-            j = jobs.pop()
-            heapq.heappush(waits, [j[1], j[0]])
-            cur = j[0]
-        
-        w = heapq.heappop(waits)
-        cur += w[0]
-        ans += cur - w[1]
+    while True:
+        while jobs and time>=jobs[0][1]:
+            heapq.heappush(pq,jobs.popleft())
+        if len(pq)==0:
+            if jobs:
+                time = jobs[0][1]    
+            else:
+                break
+            
+        else:
+            cur = heapq.heappop(pq)
+            time += cur[0]
+            answer += (time-cur[1])
+            
     
-    return ans // num
-    
-    
+    return answer // num
