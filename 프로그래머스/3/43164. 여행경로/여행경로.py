@@ -1,40 +1,36 @@
-from collections import deque
+def dfs(cur, graph, city, num):
+    if len(city)-1 == num:
+        return True
+    
+    for i, [des, visit] in enumerate(graph[cur]):
+        if not visit:
+            graph[cur][i][1] = True
+            city.append(des)
+            if dfs(graph[cur][i][0], graph, city, num):
+                return True
+            graph[cur][i][1] = False
+            city.pop()
+    return False
+            
+    
 
 def solution(tickets):
-    dic = {}
-    for [f,t] in tickets:
-        if f in dic:
-            dic[f].append([False, t])
+    graph = {}
+    num_tickets = len(tickets)
+    
+    for [st, de] in tickets:
+        if st in graph:
+            graph[st].append([de, False])
         else:
-            dic[f] = [[False, t]]
-        if t not in dic:
-            dic[t] = []
-        
-    for v in dic.values():
-        v.sort(key=lambda x: x[1])
+            graph[st] = [[de, False]]
+        if not de in graph:
+            graph[de] = []
     
-    des_list = ['ICN']
+    for key in graph.keys():
+        graph[key].sort(key=lambda x: x[0])
     
-    def dfs(cur, use):
-        if use == len(tickets):
-            return True
-        
-        for tic in dic[cur]:
-            if not tic[0]:
-                tic[0] = True
-                des_list.append(tic[1])
-                
-                finish = dfs(tic[1], use+1)
-                if finish:
-                    return True
-                
-                tic[0] = False
-                des_list.pop()
-        return False
+    answer = ['ICN']
+    dfs('ICN', graph, answer, num_tickets)
+    # print(graph)
     
-    dfs('ICN', 0)
-    return des_list
-    
-    
-    
-            
+    return answer
